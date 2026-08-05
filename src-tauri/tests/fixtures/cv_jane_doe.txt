@@ -1,0 +1,35 @@
+JANE DOE
+Software Engineer | Full Stack Developer
+London, UK | jane@example.com | +44 7700 900000
+
+PROFILE
+Results-driven developer with 5 years building web applications.
+
+EMPLOYMENT HISTORY
+Senior Developer | Acme Corp
+Jan 2021 - Present
+• Led migration to React reducing load time by 40%
+• Built REST APIs serving 1M requests daily
+
+Developer | Startup Ltd
+Jun 2018 - Dec 2020
+• Developed features using Python and PostgreSQL
+
+EDUCATION
+BSc Computer Science
+University of London | 2015 - 2018
+
+KEY SKILLS
+• JavaScript
+• Python
+• React
+• SQL
+• Docker
+
+CERTIFICATIONS
+AWS Solutions Architect
+Amazon | 2022
+
+LANGUAGES
+English (Native)
+Spanish (Intermediate)

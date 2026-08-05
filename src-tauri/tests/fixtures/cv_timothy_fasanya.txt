@@ -1,0 +1,45 @@
+TIMOTHY FASANYA
+Cybersecurity Consultant | Network Technician | Splunk SIEM Specialist | IT Project Management
+Gothenburg, Sweden | +46 700 485 115 | timothy.fasanya79@gmail.com | linkedin.com/in/timfas | credly.com/users/tim-fas
+PROFILE
+Experienced Cybersecurity Consultant and Network Technician with a strong track
+record in real-time technical support, network migration, and security protocol
+implementation. Skilled in vulnerability management, network troubleshooting,
+leveraging network automation tools, and advanced analysis for threat detection
+and monitoring.
+EDUCATION
+Cybersecurity and Network Administration (CNA) [IN PROGRESS]
+University of Skovde, Skovde, Sweden | September 2025 -- Present
+Focus: Cybersecurity principles and practices, Network administration, Threat analysis.
+Network Design and Computer Management (60 ECTS)
+Halmstad University, Halmstad, Sweden | August 2020 -- June 2021
+EMPLOYMENT HISTORY
+Consulting Partner (IT Security Solutions) | ADENA Consulting Services Limited
+September 2022 -- Present (Freelance / Remote)
+• Provide IT security consulting services to clients, advising on cybersecurity strategy.
+• Lead cross-functional teams on IT security projects, applying Agile project management.
+Network Technician | Tele2 AB, Gothenburg, Sweden
+March 2023 -- September 2024
+• Provided real-time technical support and ensured prompt resolution of network issues.
+• Contributed to network migration projects, ensuring minimal disruption to services.
+LANGUAGES
+English (Fluent)
+Swedish (Intermediate)
+KEY SKILLS
+• Cybersecurity Consulting
+• Network and Security Analysis
+• Vulnerability Management
+• SIEM Design and Operations
+• Security Data Analysis (Splunk)
+CERTIFICATIONS
+Cisco CCNA
+Cisco | 2021
+CompTIA Security+ (ce)
+CompTIA | 2022
+PROJECTS AND ACHIEVEMENTS
+Real-time Network Monitoring System
+Splunk on Splunk project: designed and deployed a SIEM monitoring system.
+IT COMPETENCE
+Splunk Core Certified Power User
+Splunk | Sept 2021
+Network Technician: Experienced in network device configuration management and network migration.

@@ -1,0 +1,2 @@
+-- Migration v001: initial schema
+-- Applied programmatically in src-tauri/src/db/schema.rs

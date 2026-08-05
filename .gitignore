@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+dist/
+
+# Rust
+src-tauri/target/
+
+# IDE
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.*
+
+# Build
+*.log
+
+# Cursor (keep rules, ignore codacy if desired)
+.cursor/rules/codacy.mdc
+.vs/
+.codacy/

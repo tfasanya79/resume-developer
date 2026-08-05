@@ -1,0 +1,43 @@
+---
+description: Architecture enforcement for Local CV Builder (Tauri + React + Rust)
+globs:
+alwaysApply: true
+---
+
+# Local CV Builder — Architecture Rules
+
+## Stack
+- Frontend: React + TypeScript + Tailwind + Zustand
+- Backend: Tauri 2 + Rust
+- Database: SQLite via rusqlite (local app data dir)
+- AI: Ollama (localhost only) with rule-based fallback
+
+## Folder Conventions
+
+| Layer | Path | Naming |
+|-------|------|--------|
+| React components | `src/components/` | PascalCase |
+| React pages | `src/pages/` | PascalCase |
+| State stores | `src/state/` | camelCase files (`useCvStore.ts`) |
+| CV templates | `src/templates/cv/` | kebab-case |
+| Rust commands | `src-tauri/src/commands.rs` | snake_case functions |
+| Database | `src-tauri/src/db/` | schema.rs, models.rs, queries.rs |
+| Export | `src-tauri/src/export/` | PDF pipeline |
+| NLP | `src-tauri/src/nlp/` | Ollama + fallback |
+| Scrapers | `src-tauri/src/scrapers/` | snake_case modules |
+
+## Constraints
+
+- **Local-first**: No cloud AI APIs (OpenAI, Anthropic, etc.)
+- **Privacy**: No telemetry, no remote logging
+- **Modularity**: One concern per module; vertical slices over horizontal layers
+- **Network**: HTTP only for user-initiated scraping (job boards) and localhost Ollama
+
+## Adding New Features
+
+Use the `module-generator` skill in `.cursor/skills/module-generator/SKILL.md`.
+
+## Error Handling
+
+- Rust: `AppResult<T>` with `AppError` enum
+- Frontend: try/catch on `invoke()` with user-visible messages

@@ -1,0 +1,179 @@
+ 
+TIMOTHY FASANYA 
+Cybersecurity Consultant  |  Network Technician  |  Splunk SIEM Specialist  |  IT Project Management 
+Gothenburg, Sweden   |   +46 700 485 115   |   timothy.fasanya79@gmail.com   |   linkedin.com/in/timfas   |   credly.com/users/tim-fas 
+ 
+ 
+PROFILE 
+Experienced Cybersecurity Consultant and Network Technician with a strong track 
+record in real-time technical support, network migration, and security protocol 
+implementation. Skilled in vulnerability management, network troubleshooting, 
+leveraging network automation tools, and advanced analysis for threat detection 
+and monitoring. Adept at conducting data assessments and supporting data-driven 
+decision-making, with a strong foundation in technology solutions and effective 
+time management. 
+EDUCATION 
+Cybersecurity and Network Administration (CNA)   [IN PROGRESS] 
+University of Skovde, Skovde, Sweden  |  September 2025 -- Present 
+Focus: Cybersecurity principles and practices, Network administration, Threat analysis, 
+Security protocols, and Ethical hacking. 
+Network Design and Computer Management  (60 ECTS) 
+Halmstad University, Halmstad, Sweden  |  August 2020 -- June 2021 
+Focus: Computer system administration, Computer Network protocols (CCNP 
+standard), Cybersecurity, Linux, and Python. 
+Higher National Diploma (HND) in Banking and Finance 
+The Polytechnic Ibadan, Ibadan, Nigeria  |  January 2001 -- July 2006 
+Focus: Financial analysis, Security documentation, Asset analysis, Risk management, 
+and Strategic planning. 
+EMPLOYMENT HISTORY 
+Consulting Partner (IT Security Solutions)  |  ADENA Consulting Services Limited 
+September 2022 -- Present  (Freelance / Remote) 
+• Provide IT security consulting services to clients, advising on cybersecurity 
+strategy, risk management, and security protocol implementation. 
+• Lead cross-functional teams on IT security projects, applying Agile project 
+management practices and Scrum methodologies. 
+• Conduct vulnerability assessments and deliver actionable recommendations 
+to strengthen clients' security posture. 
+• Manage stakeholder relationships, ensuring alignment between business 
+requirements and technical security solutions. 
+Network Technician  |  Tele2 AB, Gothenburg, Sweden 
+March 2023 -- September 2024 
+• Provided real-time technical support and ensured prompt resolution of 
+ 
+ 
+DETAILS 
+Gothenburg, Sweden 
++46 700 485 115 
+timothy.fasanya79@gmail.com 
+linkedin.com/in/timfas 
+credly.com/users/tim-fas 
+LANGUAGES 
+English  (Fluent) 
+Swedish  (Intermediate) 
+KEY SKILLS 
+• Cybersecurity Consulting 
+• Network and Security Analysis 
+• Vulnerability Management 
+• SIEM Design and Operations 
+• Security Data Analysis (Splunk) 
+• Incident Response 
+• Ethical Hacking 
+• Threat Detection and Monitoring 
+• IT Automation (Python, Ansible) 
+• Routing and Switching (CCNP) 
+• DevOps (Terraform, Ansible) 
+• Agile Project Management 
+• Scrum Facilitation 
+• Data Analysis and BI 
+• Stakeholder Management 
+• Cross-functional Team Leadership 
+• Risk Impact Assessment 
+• Coaching and Mentoring 
+• Business Process Management 
+CERTIFICATIONS 
+Cisco CCNA 
+Cisco  |  2021 
+CompTIA Security+ (ce) 
+CompTIA  |  2022 
+network issues. 
+• Contributed to network migration projects, ensuring minimal disruption to 
+services. 
+• Leveraged internal network automation tools for efficient configuration and 
+deployment. 
+• Performed network troubleshooting to identify and resolve complex 
+network-related issues. 
+• Maintained detailed network documentation, including network diagrams 
+and device configurations. 
+IT Security and Data Consultant  |  Orange Cyberdefense, Sweden 
+June 2021 -- February 2023 
+• Created a real-time SIEM system to enhance monitoring of the Splunk 
+environment for performance and security. 
+• Managed onboarding of security data from cloud environments (Azure, 
+Google Cloud, and AWS) into Splunk. 
+• Utilised advanced network analysis tools for threat detection and monitoring. 
+• Conducted data assessments, supporting data-driven decision-making across 
+security operations. 
+• Collaborated with cross-functional teams to identify and resolve data-related 
+issues, improving data accuracy. 
+• Created SIEM tools, dashboards, and KPIs for security monitoring using 
+Splunk. 
+IT Project Manager  |  Base Global System Technologies Ltd, Abuja, Nigeria 
+January 2010 -- September 2015 
+• Managed delivery of multiple IT projects on time and within budget, 
+overseeing full project lifecycle. 
+• Led cross-functional teams across stakeholder management, operational 
+planning, and business relationship management. 
+• Applied risk management and facilitation practices to ensure project 
+objectives were met consistently. 
+• Coached and mentored team members, building a collaborative and high-
+performing project environment. 
+• Managed backlog prioritisation and facilitated key project management 
+processes and stakeholder communications. 
+PROJECTS AND ACHIEVEMENTS 
+Real-time Network Monitoring System 
+Splunk on Splunk project: designed and deployed a SIEM monitoring system to 
+monitor the network services of Splunk servers, ensuring performance and 
+continuous security monitoring of the infrastructure. 
+Agile Project Delivery 
+Successfully delivered multiple IT projects on time and within budget at Base 
+Global System Technologies Ltd, applying structured project management 
+methodologies and Agile practices. 
+IT COMPETENCE 
+Splunk Core Certified Power User 
+Splunk  |  Sept 2021 
+Splunk Core Certified Adv. Power User 
+Splunk  |  Dec 2021 
+Splunk Enterprise Certified Admin 
+Splunk  |  Dec 2021 
+Certified Scrum Master (CSM) 
+Scrum Alliance  |  2024 
+IBM IT Scrum Master Prof. Certificate 
+IBM / Coursera  |  May 2024  
+(ISC)2 SSCP 
+(ISC)2 / Coursera  |  Aug 2021  
+Cisco Cybersecurity Essentials 
+Cisco  |  May 2021 
+Introduction to Cybersecurity 
+Cisco  |  Apr 2021 
+Vulnerability Assessment 
+Infosec  |  Oct 2022 
+Endpoint Detection and Response (EDR) 
+Qualys  |  Nov 2022 
+Scanning Strategies and Best Practices 
+Qualys  |  Nov 2022 
+Google IT Automation with Python 
+Google / Coursera  |  Jul 2024 
+Introduction to Ansible 
+Coursera  |  Jul 2022 
+DevOps Essentials 
+IBM / Coursera  |  May 2024  
+Power BI -- Data Analysis 
+Microsoft  |  2024 
+Agile with Atlassian Jira 
+Atlassian  |  May 2022 
+Google IT Support Professional 
+Google / Coursera  |  Jul 2020 
+Project Management Methodology 
+Broad Spectrum Synergy  |  Feb 2009  
+Network Technician: Educated as a Network Design and Computer Manager with 
+knowledge up to Cisco CCNP level networking protocols and a Cisco CCNA 
+certification. Experienced in network device configuration management (switches 
+and routers), network automation, real-time network analysis and monitoring, and 
+network migration. 
+Cybersecurity: Experienced IT Security Consultant with expertise in network 
+security analysis, threat detection, vulnerability management, security data 
+management, and implementation of security protocols. Proficient in onboarding 
+security data from cloud environments (Azure, Google Cloud, AWS) into Splunk, 
+and in creating SIEM tools, dashboards, and KPIs for security monitoring. 
+IT Automation (Cloud and On-Premises): Skilled in automating tasks using Python, 
+Ansible, and Terraform. 
+Agile and Scrum Methodologies: Certified Scrum Master (CSM, Scrum Alliance) 
+and IBM IT Scrum Master Professional Certificate holder, with hands-on 
+experience in Agile project management, Jira, backlog management, and Scrum 
+event facilitation. 
+Data Analysis and Business Intelligence: Proficient in Splunk (Splunk Certified), 
+PostgreSQL, Microsoft Excel, and Microsoft Power BI for data analysis and 
+reporting. Experienced in leveraging data for informed decision-making. 
+Business Process Management: Skilled in creating and managing business 
+processes, identifying gaps, and optimising workflows. 
+ 
