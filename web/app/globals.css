@@ -1,18 +1,44 @@
 @import 'tailwindcss';
 
 @theme {
-  /* Color Palette */
-  --color-primary-50: 240 249 255;
-  --color-primary-100: 224 242 254;
-  --color-primary-200: 186 230 253;
-  --color-primary-300: 125 211 252;
-  --color-primary-400: 56 189 248;
-  --color-primary-500: 14 165 233;
-  --color-primary-600: 2 132 199;
-  --color-primary-700: 3 105 161;
-  --color-primary-800: 7 89 133;
-  --color-primary-900: 12 74 110;
-  --color-primary-950: 8 47 73;
+  /* Color Palette (shadcn/ui semantic tokens, HSL wrapped for Tailwind v4) */
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-chart-1: hsl(var(--chart-1));
+  --color-chart-2: hsl(var(--chart-2));
+  --color-chart-3: hsl(var(--chart-3));
+  --color-chart-4: hsl(var(--chart-4));
+  --color-chart-5: hsl(var(--chart-5));
+
+  /* Extended primary scale (brand blue) */
+  --color-primary-50: rgb(240 249 255);
+  --color-primary-100: rgb(224 242 254);
+  --color-primary-200: rgb(186 230 253);
+  --color-primary-300: rgb(125 211 252);
+  --color-primary-400: rgb(56 189 248);
+  --color-primary-500: rgb(14 165 233);
+  --color-primary-600: rgb(2 132 199);
+  --color-primary-700: rgb(3 105 161);
+  --color-primary-800: rgb(7 89 133);
+  --color-primary-900: rgb(12 74 110);
+  --color-primary-950: rgb(8 47 73);
 
   /* Animations */
   --animate-accordion-down: accordion-down 0.2s ease-out;
