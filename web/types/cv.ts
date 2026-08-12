@@ -237,6 +237,7 @@ export interface LinkedInOptimization {
   summary: string;
   experience_suggestions: string[];
   improvements: string[];
+  skills_suggestions?: string[];
 }
 
 export interface SalaryInsight {
