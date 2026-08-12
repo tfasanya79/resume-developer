@@ -28,6 +28,9 @@ export function TopNav({ email }: { email?: string | null }) {
             <Link href="/applications" className="hover:text-gray-900 dark:hover:text-gray-100">
               Applications
             </Link>
+            <Link href="/jobs" className="hover:text-gray-900 dark:hover:text-gray-100">
+              Job Search
+            </Link>
             <Link href="/interview" className="hover:text-gray-900 dark:hover:text-gray-100">
               Interview Coach
             </Link>
