@@ -8,6 +8,8 @@ interface CvRow {
   id: string;
   name: string;
   template: string;
+  parent_cv_id: string | null;
+  job_id: string | null;
   professional_title: string | null;
   personal: CvProfile["personal"];
   experience: CvProfile["experience"];
@@ -29,6 +31,8 @@ function rowToProfile(row: CvRow): CvProfile {
     id: row.id,
     name: row.name,
     template: row.template,
+    parent_cv_id: row.parent_cv_id ?? null,
+    job_id: row.job_id ?? null,
     section_order: normalizeSectionOrder(row.section_order ?? []),
     professional_title: row.professional_title ?? "",
     personal: normalizePersonal(row.personal ?? createEmptyCv().personal),
@@ -51,6 +55,8 @@ function profileToRow(profile: CvProfile) {
   return {
     name: profile.name || "Untitled CV",
     template: profile.template,
+    parent_cv_id: profile.parent_cv_id ?? null,
+    job_id: profile.job_id ?? null,
     professional_title: profile.professional_title,
     personal: profile.personal,
     experience: profile.experience,
@@ -93,6 +99,21 @@ export async function createCv(template?: string): Promise<CvProfile> {
   const { data, error } = await supabase
     .from("cv_profiles")
     .insert({ ...profileToRow(empty), user_id: user.id })
+    .select("*")
+    .single();
+  if (error) throw error;
+  return rowToProfile(data as CvRow);
+}
+
+export async function createTailoredCv(tailored: CvProfile): Promise<CvProfile> {
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) throw new Error("Not authenticated");
+  const { data, error } = await supabase
+    .from("cv_profiles")
+    .insert({ ...profileToRow(tailored), user_id: user.id })
     .select("*")
     .single();
   if (error) throw error;

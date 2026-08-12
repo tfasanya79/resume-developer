@@ -5,10 +5,12 @@ import { Download, Save, FilePlus, Trash2, ChevronDown } from "lucide-react";
 import { useRouter } from "next/navigation";
 import type { CvProfile } from "@/types/cv";
 import { normalizePersonal, normalizeSectionOrder } from "@/types/cv";
-import { saveCv, createCv, deleteCv } from "@/lib/cvDb";
+import { saveCv, createCv, deleteCv, createTailoredCv } from "@/lib/cvDb";
 import { exportProfileToPdf, TemplateExportError } from "@/lib/exportPdf";
 import { exportProfileToDocx } from "@/lib/exportDocx";
 import { formatCvFilename } from "@/lib/cvNaming";
+import { applyTailorChanges } from "@/lib/tailor";
+import type { TailorProposal } from "@/types/cv";
 
 import { PersonalInfoForm } from "@/components/cv/PersonalInfoForm";
 import { ExperienceEditor } from "@/components/cv/ExperienceEditor";
@@ -23,6 +25,7 @@ import { SectionOrderEditor } from "@/components/cv/SectionOrderEditor";
 import { CvImprovementPanel } from "@/components/cv/CvImprovementPanel";
 import { TemplatePicker } from "@/components/cv/TemplatePicker";
 import { AtsSidebar } from "@/components/cv/AtsSidebar";
+import { TailorReviewModal } from "@/components/cv/TailorReviewModal";
 
 interface CvRow extends Record<string, unknown> {
   id: string;
@@ -80,6 +83,9 @@ export function CvBuilderClient({ initialRow }: { initialRow: CvRow }) {
   const [isExporting, setIsExporting] = useState(false);
   const [exportFormat, setExportFormat] = useState<"pdf" | "docx">("pdf");
   const [showFormatMenu, setShowFormatMenu] = useState(false);
+  const [tailorProposal, setTailorProposal] = useState<TailorProposal | null>(null);
+  const [isTailoring, setIsTailoring] = useState(false);
+  const [isApplyingTailor, setIsApplyingTailor] = useState(false);
   const skipNextAutosave = useRef(true);
 
   const updateProfile = (patch: Partial<CvProfile>) => {
@@ -135,6 +141,41 @@ export function CvBuilderClient({ initialRow }: { initialRow: CvRow }) {
     if (!confirm("Delete this CV? This cannot be undone.")) return;
     await deleteCv(profile.id);
     router.push("/dashboard");
+  };
+
+  const handleTailorToJob = async () => {
+    if (!jobText.trim()) return;
+    try {
+      setIsTailoring(true);
+      setMessage("");
+      const res = await fetch("/api/tailor", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ profile, jobDescription: jobText }),
+      });
+      if (!res.ok) throw new Error((await res.json()).error || "Tailoring failed");
+      const proposal: TailorProposal = await res.json();
+      setTailorProposal(proposal);
+    } catch (e) {
+      setMessage(String(e));
+    } finally {
+      setIsTailoring(false);
+    }
+  };
+
+  const handleApplyTailor = async (selectedIds: string[]) => {
+    if (!tailorProposal) return;
+    try {
+      setIsApplyingTailor(true);
+      const tailored = applyTailorChanges(profile, tailorProposal.changes, selectedIds);
+      const saved = await createTailoredCv(tailored);
+      setTailorProposal(null);
+      router.push(`/cv/${saved.id}`);
+    } catch (e) {
+      setMessage(String(e));
+    } finally {
+      setIsApplyingTailor(false);
+    }
   };
 
   const handleExportPdf = async () => {
@@ -295,12 +336,21 @@ export function CvBuilderClient({ initialRow }: { initialRow: CvRow }) {
             {showJobBox ? "Hide" : "Add"} job description for ATS matching
           </button>
           {showJobBox && (
-            <textarea
-              value={jobText}
-              onChange={(e) => setJobText(e.target.value)}
-              placeholder="Paste a job description to score your CV against it…"
-              className="mt-2 h-24 w-full rounded-lg border border-gray-300 p-2 text-xs dark:border-gray-600 dark:bg-gray-800"
-            />
+            <>
+              <textarea
+                value={jobText}
+                onChange={(e) => setJobText(e.target.value)}
+                placeholder="Paste a job description to score your CV against it…"
+                className="mt-2 h-24 w-full rounded-lg border border-gray-300 p-2 text-xs dark:border-gray-600 dark:bg-gray-800"
+              />
+              <button
+                onClick={handleTailorToJob}
+                disabled={!jobText.trim() || isTailoring}
+                className="mt-2 rounded-lg bg-purple-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-purple-700 disabled:opacity-50"
+              >
+                {isTailoring ? "Tailoring…" : "Tailor CV to This Job"}
+              </button>
+            </>
           )}
         </div>
 
@@ -350,6 +400,15 @@ export function CvBuilderClient({ initialRow }: { initialRow: CvRow }) {
           <AtsSidebar profile={profile} jobText={jobText || undefined} onApply={updateProfile} />
         </div>
       </div>
+
+      {tailorProposal && (
+        <TailorReviewModal
+          proposal={tailorProposal}
+          isApplying={isApplyingTailor}
+          onApply={handleApplyTailor}
+          onCancel={() => setTailorProposal(null)}
+        />
+      )}
     </div>
   );
 }

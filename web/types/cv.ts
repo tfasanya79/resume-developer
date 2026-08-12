@@ -141,7 +141,7 @@ export interface TailorChange {
 
 export interface TailorProposal {
   changes: TailorChange[];
-  used_ollama: boolean;
+  used_ai: boolean;
   company: string;
   role: string;
 }
@@ -149,7 +149,7 @@ export interface TailorProposal {
 export interface BulletRewriteResult {
   original: string;
   rewritten: string;
-  used_ollama: boolean;
+  used_ai: boolean;
 }
 
 export interface InterviewAnswerScore {
