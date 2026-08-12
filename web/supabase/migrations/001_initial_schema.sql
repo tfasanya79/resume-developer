@@ -80,10 +80,7 @@ create table public.cv_profiles (
 
   -- Timestamps
   created_at timestamp with time zone default timezone('utc'::text, now()) not null,
-  updated_at timestamp with time zone default timezone('utc'::text, now()) not null,
-
-  -- Constraints
-  constraint cv_profiles_user_id_fkey foreign key (user_id) references public.profiles(id) on delete cascade
+  updated_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 
 -- Indexes for performance

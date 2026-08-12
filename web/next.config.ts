@@ -1,5 +1,7 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+import type { NextConfig } from 'next'
+
+const nextConfig: NextConfig = {
+  outputFileTracingRoot: __dirname,
   experimental: {
     serverActions: {
       bodySizeLimit: '10mb',
@@ -11,21 +13,13 @@ const nextConfig = {
         protocol: 'https',
         hostname: '**.supabase.co',
       },
-      {
-        protocol: 'https',
-        hostname: 'avatars.githubusercontent.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'lh3.googleusercontent.com',
-      },
     ],
   },
-  webpack: (config) => {
+  webpack: (config: any) => {
     config.resolve.alias.canvas = false;
     config.resolve.alias.encoding = false;
     return config;
   },
-};
+}
 
-export default nextConfig;
+export default nextConfig
