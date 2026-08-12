@@ -156,6 +156,7 @@ export interface InterviewAnswerScore {
   score: number;
   feedback: string;
   star_completeness: string;
+  used_ai?: boolean;
 }
 
 export interface CvSummary {
@@ -401,3 +402,57 @@ export function createEmptyCv(name = "Untitled CV"): CvProfile {
 export function newId(): string {
   return crypto.randomUUID();
 }
+
+// =====================================================
+// APPLICATION TRACKER (matches supabase `job_applications` table)
+// =====================================================
+
+export type ApplicationStatus =
+  | "wishlist"
+  | "applied"
+  | "interviewing"
+  | "offered"
+  | "rejected"
+  | "accepted";
+
+export const APPLICATION_STATUS_COLUMNS: { id: ApplicationStatus; label: string }[] = [
+  { id: "wishlist", label: "Wishlist" },
+  { id: "applied", label: "Applied" },
+  { id: "interviewing", label: "Interviewing" },
+  { id: "offered", label: "Offered" },
+  { id: "rejected", label: "Rejected" },
+  { id: "accepted", label: "Accepted" },
+];
+
+export interface JobApplicationRecord {
+  id: string;
+  cv_id: string | null;
+  company: string;
+  position: string;
+  location: string | null;
+  job_url: string | null;
+  job_description: string | null;
+  salary_range: string | null;
+  status: ApplicationStatus;
+  applied_date: string | null;
+  interview_date: string | null;
+  offer_date: string | null;
+  rejection_date: string | null;
+  notes: string | null;
+  contact_name: string | null;
+  contact_email: string | null;
+  contact_phone: string | null;
+  follow_up_date: string | null;
+  match_score: number | null;
+  missing_keywords: string[] | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export type NewJobApplication = Partial<
+  Omit<JobApplicationRecord, "id" | "created_at" | "updated_at">
+> & {
+  company: string;
+  position: string;
+};
+

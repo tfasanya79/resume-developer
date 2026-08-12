@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import type { CvProfile } from "@/types/cv";
 import { normalizePersonal, normalizeSectionOrder } from "@/types/cv";
 import { saveCv, createCv, deleteCv, createTailoredCv } from "@/lib/cvDb";
+import { createApplication } from "@/lib/applicationsDb";
+import { extractJobMetadata } from "@/lib/tailor";
 import { exportProfileToPdf, TemplateExportError } from "@/lib/exportPdf";
 import { exportProfileToDocx } from "@/lib/exportDocx";
 import { formatCvFilename } from "@/lib/cvNaming";
@@ -86,6 +88,7 @@ export function CvBuilderClient({ initialRow }: { initialRow: CvRow }) {
   const [tailorProposal, setTailorProposal] = useState<TailorProposal | null>(null);
   const [isTailoring, setIsTailoring] = useState(false);
   const [isApplyingTailor, setIsApplyingTailor] = useState(false);
+  const [isTracking, setIsTracking] = useState(false);
   const skipNextAutosave = useRef(true);
 
   const updateProfile = (patch: Partial<CvProfile>) => {
@@ -175,6 +178,26 @@ export function CvBuilderClient({ initialRow }: { initialRow: CvRow }) {
       setMessage(String(e));
     } finally {
       setIsApplyingTailor(false);
+    }
+  };
+
+  const handleTrackApplication = async () => {
+    if (!jobText.trim()) return;
+    try {
+      setIsTracking(true);
+      const { company, role } = extractJobMetadata(jobText);
+      await createApplication({
+        company: company || "Unknown Company",
+        position: role || "Unknown Role",
+        job_description: jobText,
+        cv_id: profile.id || null,
+        status: "wishlist",
+      });
+      router.push("/applications");
+    } catch (e) {
+      setMessage(String(e));
+    } finally {
+      setIsTracking(false);
     }
   };
 
@@ -343,13 +366,28 @@ export function CvBuilderClient({ initialRow }: { initialRow: CvRow }) {
                 placeholder="Paste a job description to score your CV against it…"
                 className="mt-2 h-24 w-full rounded-lg border border-gray-300 p-2 text-xs dark:border-gray-600 dark:bg-gray-800"
               />
-              <button
-                onClick={handleTailorToJob}
-                disabled={!jobText.trim() || isTailoring}
-                className="mt-2 rounded-lg bg-purple-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-purple-700 disabled:opacity-50"
-              >
-                {isTailoring ? "Tailoring…" : "Tailor CV to This Job"}
-              </button>
+              <div className="mt-2 flex flex-wrap gap-2">
+                <button
+                  onClick={handleTailorToJob}
+                  disabled={!jobText.trim() || isTailoring}
+                  className="rounded-lg bg-purple-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-purple-700 disabled:opacity-50"
+                >
+                  {isTailoring ? "Tailoring…" : "Tailor CV to This Job"}
+                </button>
+                <button
+                  onClick={handleTrackApplication}
+                  disabled={!jobText.trim() || isTracking}
+                  className="rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+                >
+                  {isTracking ? "Adding…" : "Track This Application"}
+                </button>
+                <a
+                  href={`/interview?cvId=${profile.id}`}
+                  className="rounded-lg border border-indigo-300 px-3 py-1.5 text-xs font-medium text-indigo-700 hover:bg-indigo-50 dark:border-indigo-700 dark:text-indigo-300 dark:hover:bg-indigo-900/30"
+                >
+                  Practice Interview
+                </a>
+              </div>
             </>
           )}
         </div>

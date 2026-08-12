@@ -6,14 +6,55 @@ import { extractKeywords } from "@/lib/ats";
 
 export function extractJobMetadata(jobText: string): { company: string; role: string } {
   const lines = jobText.split("\n").map((l) => l.trim()).filter(Boolean);
-  const role = lines[0] || "Role";
-  const companyLine = lines.find(
-    (l) => l.toLowerCase().includes("company") || l.includes(" at "),
+  const firstLine = lines[0] || "";
+
+  let role = "";
+  let company = "";
+
+  // "Acme Corp is hiring a Senior Backend Engineer." style postings.
+  const hiringMatch = jobText.match(
+    /([A-Z][\w&.,'-]*(?:\s+[A-Z][\w&.,'-]*){0,4})\s+is\s+hiring\s+(?:a|an)?\s*([A-Za-z0-9/&\-, ]{3,60}?)[.\n]/i,
   );
-  const company = companyLine
-    ? companyLine.replace(/company:/i, "").trim() || "Company"
-    : "Company";
-  return { company, role };
+  if (hiringMatch) {
+    company = hiringMatch[1].trim();
+    role = hiringMatch[2].trim();
+  }
+
+  // "We are seeking/looking for a Senior Backend Engineer..." style postings.
+  if (!role) {
+    const seekingMatch = jobText.match(
+      /(?:seeking|looking for|hiring)\s+(?:a|an)\s+([A-Za-z0-9/&\-, ]{3,60}?)(?:\s+to\s+join|\s+at\s+|[.\n])/i,
+    );
+    if (seekingMatch) role = seekingMatch[1].trim();
+  }
+
+  // "Senior Backend Engineer at Acme Corp" style headers.
+  if (!role) {
+    const titleAtMatch = jobText.match(
+      /^([A-Za-z0-9/&\-, ]{3,60}?)\s+at\s+([A-Z][\w&.,'-]*(?:\s+[A-Z][\w&.,'-]*){0,3})\b/,
+    );
+    if (titleAtMatch) {
+      role = titleAtMatch[1].trim();
+      if (!company) company = titleAtMatch[2].trim();
+    }
+  }
+
+  // Fallback: short first line is probably a title/header; otherwise truncate so we never
+  // show an entire multi-sentence job description as the "role".
+  if (!role) {
+    role = firstLine.length > 0 && firstLine.length <= 80 ? firstLine : firstLine.slice(0, 60).trim();
+  }
+
+  if (!company) {
+    const atMatch = jobText.match(/\bat\s+([A-Z][\w&.,'-]*(?:\s+[A-Z][\w&.,'-]*){0,3})\b/);
+    if (atMatch) company = atMatch[1].trim();
+  }
+  if (!company) {
+    const companyLine = lines.find((l) => l.toLowerCase().includes("company"));
+    if (companyLine) company = companyLine.replace(/company:?/i, "").trim();
+  }
+
+  return { company: company || "Company", role: role || "Role" };
 }
 
 /** Rule-based tailoring used when the AI call is unavailable or fails. */
