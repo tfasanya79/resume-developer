@@ -6,21 +6,21 @@ Your career data never leaves your machine.
 
 ## Features
 
-- **CV Builder** — structured forms, **14 templates**, live preview, drag-and-drop section ordering, **template-faithful PDF export**
-- **Real-time ATS sidebar** — score, categories, and one-click fixes while you edit
-- **Import CV (PDF)** — upload an existing CV PDF, review parsed fields, then edit or tailor for a job
-- **CV naming** — exports default to `CV_FirstName_LastName.pdf` (e.g. `CV_Timothy_Fasanya.pdf`)
-- **Improve CV** — ATS checks, missing sections, and bullet-quality suggestions (optional Ollama rewrites)
-- **Save & Export** — SQLite persistence, PDF export, portfolio HTML export
-- **Application Tracker** — Kanban board, CV version links, reminder dates
-- **Job Match** — hybrid semantic + keyword scoring, tailor diff review, company/role for cover letters
-- **Inline bullet AI** — STAR rewrite and add-metrics per bullet (Ollama optional)
-- **Job Search** — RemoteOK + Arbeitnow scrapers with semantic ranking
-- **Skill Gap Analyzer** — compare skills vs job requirements
-- **Interview Coach** — Ollama-generated questions + answer scoring with STAR feedback
-- **LinkedIn Optimizer** — headline, summary, and experience suggestions
-- **Salary Insights** — local salary range estimates and negotiation tips
-- **Local AI** — optional Ollama integration with rule-based fallback
+- **CV Builder**: structured forms, **14 templates**, live preview, drag-and-drop section ordering, **template-faithful PDF export**
+- **Real-time ATS sidebar**: score, categories, and one-click fixes while you edit
+- **Import CV (PDF)**: upload an existing CV PDF, review parsed fields, then edit or tailor for a job
+- **CV naming**: exports default to `CV_FirstName_LastName.pdf` (e.g. `CV_Timothy_Fasanya.pdf`)
+- **Improve CV**: ATS checks, missing sections, and bullet-quality suggestions (optional Ollama rewrites)
+- **Save & Export**: SQLite persistence, PDF export, portfolio HTML export
+- **Application Tracker**: Kanban board, CV version links, reminder dates
+- **Job Match**: hybrid semantic + keyword scoring, tailor diff review, company/role for cover letters
+- **Inline bullet AI**: STAR rewrite and add-metrics per bullet (Ollama optional)
+- **Job Search**: RemoteOK + Arbeitnow scrapers with semantic ranking
+- **Skill Gap Analyzer**: compare skills vs job requirements
+- **Interview Coach**: Ollama-generated questions + answer scoring with STAR feedback
+- **LinkedIn Optimizer**: headline, summary, and experience suggestions
+- **Salary Insights**: local salary range estimates and negotiation tips
+- **Local AI**: optional Ollama integration with rule-based fallback
 
 ## Prerequisites
 
@@ -55,7 +55,7 @@ docs/             Setup guide and roadmap
 ## Import an existing CV
 
 1. Open **CV Builder** and click **Import CV** (PDF).
-2. Choose a PDF — files named `CV_FirstName_LastName.pdf` are recognized automatically.
+2. Choose a PDF, files named `CV_FirstName_LastName.pdf` are recognized automatically.
 3. Review parsed sections in the import modal (warnings highlight low-confidence fields).
 4. **Accept & Edit** to load into the builder, or **Accept & Tailor for Job** to save and open Job Match.
 

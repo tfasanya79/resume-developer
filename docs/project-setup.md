@@ -3,7 +3,7 @@
 ## Prerequisites
 
 - Node.js v18+
-- Rust (stable) — install via `winget install Rustlang.Rustup` or [rustup.rs](https://rustup.rs)
+- Rust (stable), install via `winget install Rustlang.Rustup` or [rustup.rs](https://rustup.rs)
 - npm
 - Git (optional)
 
@@ -46,7 +46,7 @@ SQLite database is stored in the OS app data directory:
 
 | Issue | Fix |
 |-------|-----|
-| `npm` not found during `tauri dev` | Fixed via `scripts/start-vite.cmd` — run `npm run tauri dev` again |
+| `npm` not found during `tauri dev` | Fixed via `scripts/start-vite.cmd`: run `npm run tauri dev` again |
 | `cargo` / `rustc` not found | Restart PowerShell after installing Rust, or run `$env:Path = [Environment]::GetEnvironmentVariable('Path','User')` then retry |
 | `rustc` not found | Restart terminal after installing Rust |
 | Tauri build fails | Run `cd src-tauri && cargo clean` then retry |

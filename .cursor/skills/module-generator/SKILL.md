@@ -3,7 +3,7 @@ name: module-generator
 description: Generates new modules for Local CV Builder with correct architecture, naming, and boilerplate. Use when adding scrapers, CV templates, Rust commands, React pages, or database tables.
 ---
 
-# Module Generator — Local CV Builder
+# Module Generator: Local CV Builder
 
 ## new-rust-command
 
