@@ -150,6 +150,8 @@ export interface BulletRewriteResult {
   original: string;
   rewritten: string;
   used_ai: boolean;
+  mode: 'star' | 'metrics';
+  note?: string;
 }
 
 export interface InterviewAnswerScore {
