@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { AtsReport, CvProfile, ImprovementSuggestion, SkillGapResult } from "@/types/cv";
+import type { AtsReport, CvProfile, ImprovementSuggestion, SalaryInsight, SkillGapResult } from "@/types/cv";
 import { computeAtsReport } from "@/lib/ats";
 import { applyImprovementSuggestion } from "@/lib/applySuggestion";
 import { withAppBasePath } from "@/lib/paths";
@@ -17,6 +17,8 @@ export function AtsSidebar({ profile, jobText, onApply }: Props) {
   const [expanded, setExpanded] = useState(true);
   const [skillGap, setSkillGap] = useState<SkillGapResult | null>(null);
   const [skillGapLoading, setSkillGapLoading] = useState(false);
+  const [salaryInsight, setSalaryInsight] = useState<SalaryInsight | null>(null);
+  const [salaryLoading, setSalaryLoading] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -56,6 +58,38 @@ export function AtsSidebar({ profile, jobText, onApply }: Props) {
 
     return () => clearTimeout(timer);
   }, [profile, jobText]);
+
+  useEffect(() => {
+    if (!jobText?.trim() && !profile.professional_title?.trim()) {
+      setSalaryInsight(null);
+      setSalaryLoading(false);
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      try {
+        setSalaryLoading(true);
+        const res = await fetch(withAppBasePath("/api/salary-insights"), {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            jobTitle: profile.professional_title || "",
+            location: profile.personal?.location || "",
+            jobDescription: jobText || "",
+          }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Salary insight failed");
+        setSalaryInsight(data);
+      } catch {
+        setSalaryInsight(null);
+      } finally {
+        setSalaryLoading(false);
+      }
+    }, 600);
+
+    return () => clearTimeout(timer);
+  }, [profile.professional_title, profile.personal?.location, jobText]);
 
   const applySuggestion = (s: ImprovementSuggestion) => {
     const patch = applyImprovementSuggestion(profile, s);
@@ -146,6 +180,41 @@ export function AtsSidebar({ profile, jobText, onApply }: Props) {
                 </>
               ) : (
                 <p className="mt-2 text-xs text-gray-500">Add a job description to compare required skills.</p>
+              )}
+            </div>
+          )}
+
+          {(jobText?.trim() || profile.professional_title?.trim()) && (
+            <div className="mt-4 rounded-lg border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-900">
+              <div className="flex items-center justify-between gap-2">
+                <h4 className="text-sm font-semibold">Salary Insights</h4>
+                {salaryInsight && (
+                  <span className="text-xs font-medium text-blue-600">{salaryInsight.region}</span>
+                )}
+              </div>
+              {salaryLoading ? (
+                <p className="mt-2 text-xs text-gray-500">Estimating salary range...</p>
+              ) : salaryInsight ? (
+                <>
+                  <p className="mt-2 text-lg font-bold text-blue-600">
+                    {salaryInsight.currency} {salaryInsight.min_salary.toLocaleString()} to {salaryInsight.max_salary.toLocaleString()}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    Median around {salaryInsight.currency} {salaryInsight.median_salary.toLocaleString()} for {salaryInsight.role}
+                  </p>
+                  {salaryInsight.negotiation_tips.length > 0 && (
+                    <ul className="mt-3 list-disc space-y-1 pl-4 text-xs text-gray-600 dark:text-gray-300">
+                      {salaryInsight.negotiation_tips.map((tip) => (
+                        <li key={tip}>{tip}</li>
+                      ))}
+                    </ul>
+                  )}
+                  <p className="mt-3 text-[11px] italic text-gray-400">
+                    AI estimate only, not sourced from live market data.
+                  </p>
+                </>
+              ) : (
+                <p className="mt-2 text-xs text-gray-500">Add a professional title or job description to see an estimate.</p>
               )}
             </div>
           )}
