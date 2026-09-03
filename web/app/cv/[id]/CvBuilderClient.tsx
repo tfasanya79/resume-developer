@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Download, Save, FilePlus, Trash2, ChevronDown } from "lucide-react";
+import { Download, Save, FilePlus, Trash2, ChevronDown, Upload } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { CvProfile } from "@/types/cv";
@@ -11,7 +11,6 @@ import { createApplication } from "@/lib/applicationsDb";
 import { extractJobMetadata } from "@/lib/tailor";
 import { exportProfileToPdf, TemplateExportError } from "@/lib/exportPdf";
 import { exportProfileToDocx } from "@/lib/exportDocx";
-import { formatCvFilename } from "@/lib/cvNaming";
 import { applyTailorChanges } from "@/lib/tailor";
 import { withAppBasePath } from "@/lib/paths";
 import type { TailorProposal } from "@/types/cv";
@@ -51,6 +50,12 @@ interface CvRow extends Record<string, unknown> {
   updated_at: string;
 }
 
+interface ImportNotice {
+  filename: string;
+  confidence: number;
+  warnings: string[];
+}
+
 function rowToProfile(row: CvRow): CvProfile {
   return {
     id: row.id,
@@ -76,6 +81,7 @@ function rowToProfile(row: CvRow): CvProfile {
 
 export function CvBuilderClient({ initialRow }: { initialRow: CvRow }) {
   const router = useRouter();
+  const importInputRef = useRef<HTMLInputElement | null>(null);
   const [profile, setProfile] = useState<CvProfile>(() => rowToProfile(initialRow));
   const [jobText, setJobText] = useState("");
   const [dirty, setDirty] = useState(false);
@@ -91,6 +97,8 @@ export function CvBuilderClient({ initialRow }: { initialRow: CvRow }) {
   const [isTailoring, setIsTailoring] = useState(false);
   const [isApplyingTailor, setIsApplyingTailor] = useState(false);
   const [isTracking, setIsTracking] = useState(false);
+  const [isImporting, setIsImporting] = useState(false);
+  const [importNotice, setImportNotice] = useState<ImportNotice | null>(null);
   const skipNextAutosave = useRef(true);
 
   const updateProfile = (patch: Partial<CvProfile>) => {
@@ -109,7 +117,18 @@ export function CvBuilderClient({ initialRow }: { initialRow: CvRow }) {
     }
   }, [profile]);
 
-  // Debounced autosave, skipping the very first mount.
+  useEffect(() => {
+    const storedNotice = sessionStorage.getItem("cv-import-notice");
+    if (!storedNotice) return;
+    sessionStorage.removeItem("cv-import-notice");
+    try {
+      setImportNotice(JSON.parse(storedNotice) as ImportNotice);
+      setMessage("Imported CV PDF successfully");
+    } catch {
+      // ignore bad session storage data
+    }
+  }, []);
+
   useEffect(() => {
     if (skipNextAutosave.current) {
       skipNextAutosave.current = false;
@@ -120,8 +139,7 @@ export function CvBuilderClient({ initialRow }: { initialRow: CvRow }) {
       void handleSave();
     }, 2000);
     return () => clearTimeout(t);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [profile]);
+  }, [profile, dirty, handleSave]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -146,6 +164,37 @@ export function CvBuilderClient({ initialRow }: { initialRow: CvRow }) {
     if (!confirm("Delete this CV? This cannot be undone.")) return;
     await deleteCv(profile.id);
     router.push("/dashboard");
+  };
+
+  const handleImport = async (file: File | null) => {
+    if (!file) return;
+    try {
+      setIsImporting(true);
+      setMessage("");
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("cvId", profile.id);
+      const res = await fetch(withAppBasePath("/api/cv/import"), {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Import failed");
+      setProfile(data.profile as CvProfile);
+      setDirty(false);
+      setActiveSection("personal");
+      setImportNotice({
+        filename: data.profile?.source_filename || file.name,
+        confidence: data.confidence,
+        warnings: data.warnings ?? [],
+      });
+      setMessage("Imported CV PDF successfully");
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : String(error));
+    } finally {
+      if (importInputRef.current) importInputRef.current.value = "";
+      setIsImporting(false);
+    }
   };
 
   const handleTailorToJob = async () => {
@@ -244,7 +293,11 @@ export function CvBuilderClient({ initialRow }: { initialRow: CvRow }) {
       />
     ),
     experience: (
-      <ExperienceEditor items={profile.experience} onChange={(experience) => updateProfile({ experience })} />
+      <ExperienceEditor
+        items={profile.experience}
+        jobContext={jobText}
+        onChange={(experience) => updateProfile({ experience })}
+      />
     ),
     education: (
       <EducationEditor items={profile.education} onChange={(education) => updateProfile({ education })} />
@@ -286,6 +339,24 @@ export function CvBuilderClient({ initialRow }: { initialRow: CvRow }) {
             {profile.template.replace(/-/g, " ")}
           </button>
           {dirty && <span className="text-xs text-amber-600">Unsaved</span>}
+          <input
+            ref={importInputRef}
+            type="file"
+            accept="application/pdf,.pdf"
+            className="hidden"
+            onChange={(event) => void handleImport(event.target.files?.[0] ?? null)}
+          />
+          <button
+            type="button"
+            onClick={() => importInputRef.current?.click()}
+            disabled={isImporting}
+            className="rounded-lg border border-gray-300 px-3 py-2 text-xs dark:border-gray-600"
+            title="Import CV PDF"
+          >
+            <span className="flex items-center gap-1.5">
+              <Upload size={14} /> {isImporting ? "Importing..." : "Import PDF"}
+            </span>
+          </button>
           <button onClick={handleNewCv} className="rounded-lg bg-gray-200 p-2 dark:bg-gray-700" title="New CV">
             <FilePlus size={16} />
           </button>
@@ -353,6 +424,21 @@ export function CvBuilderClient({ initialRow }: { initialRow: CvRow }) {
           </div>
         )}
 
+        {importNotice && (
+          <div className="border-b border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-900 dark:border-blue-900/40 dark:bg-blue-900/20 dark:text-blue-100">
+            <p className="font-medium">
+              Imported from {importNotice.filename}, confidence {Math.round(importNotice.confidence * 100)}%
+            </p>
+            {importNotice.warnings.length > 0 && (
+              <ul className="mt-1 list-disc space-y-0.5 pl-5 text-xs text-blue-800 dark:text-blue-200">
+                {importNotice.warnings.map((warning) => (
+                  <li key={warning}>{warning}</li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )}
+
         <div className="border-b border-gray-200 p-2 dark:border-gray-700">
           <button
             onClick={() => setShowJobBox(!showJobBox)}
@@ -365,7 +451,7 @@ export function CvBuilderClient({ initialRow }: { initialRow: CvRow }) {
               <textarea
                 value={jobText}
                 onChange={(e) => setJobText(e.target.value)}
-                placeholder="Paste a job description to score your CV against it…"
+                placeholder="Paste a job description to score your CV against it..."
                 className="mt-2 h-24 w-full rounded-lg border border-gray-300 p-2 text-xs dark:border-gray-600 dark:bg-gray-800"
               />
               <div className="mt-2 flex flex-wrap gap-2">
@@ -374,14 +460,14 @@ export function CvBuilderClient({ initialRow }: { initialRow: CvRow }) {
                   disabled={!jobText.trim() || isTailoring}
                   className="rounded-lg bg-purple-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-purple-700 disabled:opacity-50"
                 >
-                  {isTailoring ? "Tailoring…" : "Tailor CV to This Job"}
+                  {isTailoring ? "Tailoring..." : "Tailor CV to This Job"}
                 </button>
                 <button
                   onClick={handleTrackApplication}
                   disabled={!jobText.trim() || isTracking}
                   className="rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-700 disabled:opacity-50"
                 >
-                  {isTracking ? "Adding…" : "Track This Application"}
+                  {isTracking ? "Adding..." : "Track This Application"}
                 </button>
                 <Link
                   href={`/interview?cvId=${profile.id}`}

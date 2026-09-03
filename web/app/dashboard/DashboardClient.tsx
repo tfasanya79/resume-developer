@@ -1,16 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { FilePlus, Trash2, FileText } from "lucide-react";
+import { FilePlus, Trash2, FileText, Upload } from "lucide-react";
 import type { CvSummary } from "@/types/cv";
 import { createCv, deleteCv } from "@/lib/cvDb";
+import { withAppBasePath } from "@/lib/paths";
 import { CV_TEMPLATES } from "@/types/cv";
 
 export function DashboardClient({ initialCvs }: { initialCvs: CvSummary[] }) {
   const router = useRouter();
+  const importInputRef = useRef<HTMLInputElement | null>(null);
   const [cvs, setCvs] = useState(initialCvs);
   const [creating, setCreating] = useState(false);
+  const [importing, setImporting] = useState(false);
+  const [message, setMessage] = useState("");
 
   const handleCreate = async (template?: string) => {
     setCreating(true);
@@ -22,6 +26,37 @@ export function DashboardClient({ initialCvs }: { initialCvs: CvSummary[] }) {
     }
   };
 
+  const handleImport = async (file: File | null) => {
+    if (!file) return;
+    setImporting(true);
+    setMessage("");
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await fetch(withAppBasePath("/api/cv/import"), {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Import failed");
+      sessionStorage.setItem(
+        "cv-import-notice",
+        JSON.stringify({
+          filename: data.profile?.source_filename || file.name,
+          confidence: data.confidence,
+          warnings: data.warnings ?? [],
+        }),
+      );
+      router.push(`/cv/${data.profile.id}`);
+      router.refresh();
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : String(error));
+    } finally {
+      if (importInputRef.current) importInputRef.current.value = "";
+      setImporting(false);
+    }
+  };
+
   const handleDelete = async (id: string) => {
     if (!confirm("Delete this CV? This cannot be undone.")) return;
     await deleteCv(id);
@@ -30,25 +65,58 @@ export function DashboardClient({ initialCvs }: { initialCvs: CvSummary[] }) {
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-8">
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold">Your CVs</h1>
           <p className="text-sm text-gray-500">
             {cvs.length === 0 ? "Create your first CV to get started." : `${cvs.length} saved`}
           </p>
         </div>
-        <button
-          onClick={() => handleCreate()}
-          disabled={creating}
-          className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
-        >
-          <FilePlus size={16} /> New CV
-        </button>
+        <div className="flex flex-wrap items-center gap-2">
+          <input
+            ref={importInputRef}
+            type="file"
+            accept="application/pdf,.pdf"
+            className="hidden"
+            onChange={(event) => void handleImport(event.target.files?.[0] ?? null)}
+          />
+          <button
+            type="button"
+            onClick={() => importInputRef.current?.click()}
+            disabled={importing}
+            className="flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:hover:bg-gray-800"
+          >
+            <Upload size={16} /> {importing ? "Importing PDF..." : "Import CV PDF"}
+          </button>
+          <button
+            onClick={() => handleCreate()}
+            disabled={creating}
+            className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+          >
+            <FilePlus size={16} /> New CV
+          </button>
+        </div>
       </div>
+
+      {message && (
+        <div className="mb-4 rounded-lg bg-red-50 px-4 py-2 text-sm text-red-700 dark:bg-red-900/30 dark:text-red-200">
+          {message}
+        </div>
+      )}
 
       {cvs.length === 0 ? (
         <div className="rounded-xl border border-dashed border-gray-300 p-10 text-center dark:border-gray-700">
-          <p className="mb-4 text-gray-500">Pick a template to start:</p>
+          <p className="mb-4 text-gray-500">Pick a template to start, or import your current resume PDF:</p>
+          <div className="mb-6">
+            <button
+              type="button"
+              onClick={() => importInputRef.current?.click()}
+              disabled={importing}
+              className="inline-flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:hover:bg-gray-800"
+            >
+              <Upload size={16} /> {importing ? "Importing PDF..." : "Import CV PDF"}
+            </button>
+          </div>
           <div className="mx-auto grid max-w-2xl grid-cols-2 gap-2 sm:grid-cols-4">
             {CV_TEMPLATES.slice(0, 8).map((t) => (
               <button

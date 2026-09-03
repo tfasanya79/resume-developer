@@ -68,6 +68,7 @@ function profileToRow(profile: CvProfile) {
     languages: profile.languages,
     section_order: profile.section_order,
     design: profile.design,
+    source_filename: profile.source_filename ?? null,
   };
 }
 
