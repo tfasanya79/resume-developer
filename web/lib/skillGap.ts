@@ -84,11 +84,11 @@ function displayName(value: string): string {
 function collectCandidateText(profile: CvProfile): string[] {
   return [
     profile.professional_title,
-    profile.personal.summary,
-    ...profile.skills,
-    ...profile.experience.flatMap((item) => [item.title, item.company, ...item.bullets]),
-    ...profile.projects.flatMap((item) => [item.name, item.description, ...item.technologies]),
-    ...profile.education.flatMap((item) => [item.degree, item.field, item.details]),
+    profile.personal?.summary,
+    ...(profile.skills ?? []),
+    ...(profile.experience ?? []).flatMap((item) => [item.title, item.company, ...(item.bullets ?? [])]),
+    ...(profile.projects ?? []).flatMap((item) => [item.name, item.description, ...(item.technologies ?? [])]),
+    ...(profile.education ?? []).flatMap((item) => [item.degree, item.field, item.details]),
   ].filter(Boolean);
 }
 
