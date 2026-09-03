@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { AtsReport, CvProfile, ImprovementSuggestion } from "@/types/cv";
+import type { AtsReport, CvProfile, ImprovementSuggestion, SkillGapResult } from "@/types/cv";
 import { computeAtsReport } from "@/lib/ats";
 import { applyImprovementSuggestion } from "@/lib/applySuggestion";
+import { withAppBasePath } from "@/lib/paths";
 
 interface Props {
   profile: CvProfile;
@@ -14,6 +15,8 @@ interface Props {
 export function AtsSidebar({ profile, jobText, onApply }: Props) {
   const [report, setReport] = useState<AtsReport | null>(null);
   const [expanded, setExpanded] = useState(true);
+  const [skillGap, setSkillGap] = useState<SkillGapResult | null>(null);
+  const [skillGapLoading, setSkillGapLoading] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -23,6 +26,34 @@ export function AtsSidebar({ profile, jobText, onApply }: Props) {
         setReport(null);
       }
     }, 400);
+    return () => clearTimeout(timer);
+  }, [profile, jobText]);
+
+  useEffect(() => {
+    if (!jobText?.trim()) {
+      setSkillGap(null);
+      setSkillGapLoading(false);
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      try {
+        setSkillGapLoading(true);
+        const res = await fetch(withAppBasePath("/api/skill-gap"), {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ profile, jobDescription: jobText }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Skill gap analysis failed");
+        setSkillGap(data);
+      } catch {
+        setSkillGap(null);
+      } finally {
+        setSkillGapLoading(false);
+      }
+    }, 500);
+
     return () => clearTimeout(timer);
   }, [profile, jobText]);
 
@@ -37,7 +68,7 @@ export function AtsSidebar({ profile, jobText, onApply }: Props) {
         onClick={() => setExpanded(true)}
         className="absolute right-2 top-2 z-10 rounded-lg bg-blue-600 px-2 py-1 text-xs text-white"
       >
-        ATS {report ? `${report.score.toFixed(0)}%` : "—"}
+        ATS {report ? `${report.score.toFixed(0)}%` : "..."}
       </button>
     );
   }
@@ -64,7 +95,7 @@ export function AtsSidebar({ profile, jobText, onApply }: Props) {
           ))}
           {report.missing_keywords.length > 0 && (
             <p className="mt-2 text-xs text-red-600">
-              Missing: {report.missing_keywords.slice(0, 5).join(", ")}
+              Missing keywords: {report.missing_keywords.slice(0, 5).join(", ")}
             </p>
           )}
           <ul className="mt-3 max-h-40 space-y-1 overflow-auto">
@@ -82,9 +113,45 @@ export function AtsSidebar({ profile, jobText, onApply }: Props) {
               </li>
             ))}
           </ul>
+
+          {jobText?.trim() && (
+            <div className="mt-4 rounded-lg border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-900">
+              <div className="flex items-center justify-between gap-2">
+                <h4 className="text-sm font-semibold">Skill Gap Analyzer</h4>
+                {skillGap && <span className="text-xs font-medium text-blue-600">{skillGap.gap_score}% match</span>}
+              </div>
+              {skillGapLoading ? (
+                <p className="mt-2 text-xs text-gray-500">Comparing your skills to the job...</p>
+              ) : skillGap ? (
+                <>
+                  <div className="mt-3">
+                    <p className="text-xs font-medium text-gray-500">Strong matches</p>
+                    <p className="mt-1 text-xs text-green-700 dark:text-green-300">
+                      {skillGap.matching_skills.length > 0 ? skillGap.matching_skills.join(", ") : "None found yet"}
+                    </p>
+                  </div>
+                  <div className="mt-3">
+                    <p className="text-xs font-medium text-gray-500">Missing from this CV</p>
+                    <p className="mt-1 text-xs text-red-600 dark:text-red-300">
+                      {skillGap.missing_skills.length > 0 ? skillGap.missing_skills.join(", ") : "No major gaps detected"}
+                    </p>
+                  </div>
+                  {skillGap.suggestions.length > 0 && (
+                    <ul className="mt-3 list-disc space-y-1 pl-4 text-xs text-gray-600 dark:text-gray-300">
+                      {skillGap.suggestions.map((suggestion) => (
+                        <li key={suggestion}>{suggestion}</li>
+                      ))}
+                    </ul>
+                  )}
+                </>
+              ) : (
+                <p className="mt-2 text-xs text-gray-500">Add a job description to compare required skills.</p>
+              )}
+            </div>
+          )}
         </>
       ) : (
-        <p className="text-xs text-gray-500">Analyzing…</p>
+        <p className="text-xs text-gray-500">Analyzing...</p>
       )}
     </div>
   );
