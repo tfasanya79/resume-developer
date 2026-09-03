@@ -1,6 +1,7 @@
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
+  basePath: '/cv-builder',
   outputFileTracingRoot: __dirname,
   experimental: {
     serverActions: {
