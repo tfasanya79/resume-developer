@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { withAppBasePath } from "@/lib/paths";
 
 export default function SignupPage() {
   const [fullName, setFullName] = useState("");
@@ -22,7 +23,7 @@ export default function SignupPage() {
       password,
       options: {
         data: { full_name: fullName },
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
+        emailRedirectTo: `${window.location.origin}${withAppBasePath("/auth/callback")}`,
       },
     });
     setLoading(false);

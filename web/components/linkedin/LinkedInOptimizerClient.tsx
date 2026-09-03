@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Sparkles, Loader2, Copy, Check } from "lucide-react";
 import type { CvSummary, LinkedInOptimization } from "@/types/cv";
 import { loadCv } from "@/lib/cvDb";
+import { withAppBasePath } from "@/lib/paths";
 
 export function LinkedInOptimizerClient({ cvs }: { cvs: CvSummary[] }) {
   const [cvId, setCvId] = useState("");
@@ -46,7 +47,7 @@ export function LinkedInOptimizerClient({ cvs }: { cvs: CvSummary[] }) {
     setError("");
     setResult(null);
     try {
-      const res = await fetch("/api/linkedin/optimize", {
+      const res = await fetch(withAppBasePath("/api/linkedin/optimize"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ headline, summary, experienceText: experience, skills }),
@@ -77,7 +78,7 @@ export function LinkedInOptimizerClient({ cvs }: { cvs: CvSummary[] }) {
       <div className="mb-6">
         <h1 className="text-2xl font-bold">LinkedIn Optimizer</h1>
         <p className="text-sm text-gray-500">
-          Paste your current LinkedIn headline, About section, and experience bullets — or auto-fill from a CV — to get
+          Paste your current LinkedIn headline, About section, and experience bullets, or auto-fill from a CV, to get
           AI-rewritten, recruiter-friendly copy.
         </p>
       </div>
@@ -150,7 +151,7 @@ export function LinkedInOptimizerClient({ cvs }: { cvs: CvSummary[] }) {
         <div className="mt-6 space-y-5 rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-gray-900">
           {!usedAi && (
             <p className="rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-800 dark:bg-amber-900/30 dark:text-amber-200">
-              AI service unavailable — showing rule-based suggestions instead.
+              AI service unavailable, showing rule-based suggestions instead.
             </p>
           )}
 

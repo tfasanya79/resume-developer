@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Sparkles, ChevronDown, ChevronUp, Loader2 } from "lucide-react";
 import type { CvSummary, InterviewQuestion, InterviewAnswerScore } from "@/types/cv";
 import { loadCv } from "@/lib/cvDb";
+import { withAppBasePath } from "@/lib/paths";
 
 const CATEGORY_STYLES: Record<string, string> = {
   behavioral: "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300",
@@ -54,7 +55,7 @@ export function InterviewCoachClient({
     setScores({});
     try {
       const profile = await loadCv(cvId);
-      const res = await fetch("/api/interview/questions", {
+      const res = await fetch(withAppBasePath("/api/interview/questions"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ profile, jobDescription }),
@@ -76,7 +77,7 @@ export function InterviewCoachClient({
     if (!answer.trim()) return;
     setScoring(idx);
     try {
-      const res = await fetch("/api/interview/answer", {
+      const res = await fetch(withAppBasePath("/api/interview/answer"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question: questions[idx].question, answer }),
@@ -108,7 +109,7 @@ export function InterviewCoachClient({
           onChange={(e) => setCvId(e.target.value)}
           className="mb-3 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm dark:border-gray-700 dark:bg-gray-800"
         >
-          {cvs.length === 0 && <option value="">No CVs yet — create one first</option>}
+          {cvs.length === 0 && <option value="">No CVs yet, create one first</option>}
           {cvs.map((cv) => (
             <option key={cv.id} value={cv.id}>
               {cv.name}

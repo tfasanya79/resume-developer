@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Download, Save, FilePlus, Trash2, ChevronDown } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { CvProfile } from "@/types/cv";
 import { normalizePersonal, normalizeSectionOrder } from "@/types/cv";
@@ -12,6 +13,7 @@ import { exportProfileToPdf, TemplateExportError } from "@/lib/exportPdf";
 import { exportProfileToDocx } from "@/lib/exportDocx";
 import { formatCvFilename } from "@/lib/cvNaming";
 import { applyTailorChanges } from "@/lib/tailor";
+import { withAppBasePath } from "@/lib/paths";
 import type { TailorProposal } from "@/types/cv";
 
 import { PersonalInfoForm } from "@/components/cv/PersonalInfoForm";
@@ -151,7 +153,7 @@ export function CvBuilderClient({ initialRow }: { initialRow: CvRow }) {
     try {
       setIsTailoring(true);
       setMessage("");
-      const res = await fetch("/api/tailor", {
+      const res = await fetch(withAppBasePath("/api/tailor"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ profile, jobDescription: jobText }),
@@ -205,7 +207,7 @@ export function CvBuilderClient({ initialRow }: { initialRow: CvRow }) {
     try {
       setIsExporting(true);
       await exportProfileToPdf(profile);
-      setMessage("Opened print dialog — choose 'Save as PDF' to export the styled CV.");
+      setMessage("Opened the print dialog. Choose 'Save as PDF' to export the styled CV.");
       setExportError(null);
     } catch (e) {
       const msg = e instanceof TemplateExportError ? e.message : String(e);
@@ -381,12 +383,12 @@ export function CvBuilderClient({ initialRow }: { initialRow: CvRow }) {
                 >
                   {isTracking ? "Adding…" : "Track This Application"}
                 </button>
-                <a
+                <Link
                   href={`/interview?cvId=${profile.id}`}
                   className="rounded-lg border border-indigo-300 px-3 py-1.5 text-xs font-medium text-indigo-700 hover:bg-indigo-50 dark:border-indigo-700 dark:text-indigo-300 dark:hover:bg-indigo-900/30"
                 >
                   Practice Interview
-                </a>
+                </Link>
               </div>
             </>
           )}

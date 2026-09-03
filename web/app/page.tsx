@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function HomePage() {
   return (
     <div className="flex min-h-screen flex-col">
@@ -8,8 +10,8 @@ export default function HomePage() {
           </div>
           <nav className="flex items-center gap-4">
             <a href="#features" className="text-sm font-medium hover:text-primary">Features</a>
-            <a href="/login" className="text-sm font-medium hover:text-primary">Log in</a>
-            <a href="/signup" className="rounded-md bg-blue-600 px-4 py-1.5 text-sm font-medium text-white hover:bg-blue-700">Sign up</a>
+            <Link href="/login" className="text-sm font-medium hover:text-primary">Log in</Link>
+            <Link href="/signup" className="rounded-md bg-blue-600 px-4 py-1.5 text-sm font-medium text-white hover:bg-blue-700">Sign up</Link>
           </nav>
         </div>
       </header>
@@ -26,9 +28,9 @@ export default function HomePage() {
               Choose from 14 professional templates.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a href="/signup" className="inline-flex items-center justify-center px-8 py-3 rounded-md bg-blue-600 text-white font-medium hover:bg-blue-700">
+              <Link href="/signup" className="inline-flex items-center justify-center px-8 py-3 rounded-md bg-blue-600 text-white font-medium hover:bg-blue-700">
                 Start Building for Free
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -62,5 +64,5 @@ export default function HomePage() {
         </div>
       </footer>
     </div>
-  )
+  );
 }

@@ -6,6 +6,7 @@ import type { CvSummary, JobListing } from "@/types/cv";
 import { loadCv } from "@/lib/cvDb";
 import { computeMatch } from "@/lib/ats";
 import { createApplication } from "@/lib/applicationsDb";
+import { withAppBasePath } from "@/lib/paths";
 
 function scoreColor(score: number) {
   if (score >= 70) return "text-green-600";
@@ -39,7 +40,7 @@ export function JobSearchClient({ cvs }: { cvs: CvSummary[] }) {
     try {
       const params = new URLSearchParams({ remoteOnly: String(remoteOnly), sources });
       if (query.trim()) params.set("q", query.trim());
-      const res = await fetch(`/api/jobs/search?${params.toString()}`);
+      const res = await fetch(withAppBasePath(`/api/jobs/search?${params.toString()}`));
       if (!res.ok) throw new Error((await res.json()).error || "Search failed");
       const data = await res.json();
       let results: JobListing[] = data.listings ?? [];
