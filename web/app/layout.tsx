@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Script from 'next/script'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -15,6 +16,11 @@ export default function RootLayout({
     <html lang="en">
       <body className="min-h-screen bg-background font-sans antialiased">
         {children}
+        <Script
+          data-goatcounter="https://timfas.com/analytics/count"
+          src="https://timfas.com/analytics/count.js"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   )
