@@ -17,8 +17,8 @@ export default function RootLayout({
       <body className="min-h-screen bg-background font-sans antialiased">
         {children}
         <Script
-          data-goatcounter="https://timfas.com/analytics/count"
-          src="https://timfas.com/analytics/count.js"
+          data-goatcounter="https://stats.187.55.230.139.sslip.io/count"
+          src="https://stats.187.55.230.139.sslip.io/count.js"
           strategy="afterInteractive"
         />
       </body>
