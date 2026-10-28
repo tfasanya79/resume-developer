@@ -95,7 +95,7 @@ STRIPE_SECRET_KEY=sk_test_your-key
 STRIPE_WEBHOOK_SECRET=whsec_your-secret
 
 # App Configuration
-NEXT_PUBLIC_APP_URL=http://187.55.230.139
+NEXT_PUBLIC_APP_URL=http://<your-vps-ip>
 NODE_ENV=production
 EOF
 	print_status ".env.local created. Please edit with real credentials!"
@@ -137,7 +137,7 @@ if [ ! -f "$NGINX_CONFIG" ]; then
 	sudo tee $NGINX_CONFIG > /dev/null << 'EOF'
 server {
 	listen 80;
-	server_name 187.55.230.139;
+	server_name <your-vps-ip>;
 
 	client_max_body_size 10M;
 
@@ -221,7 +221,7 @@ pm2 status
 echo ""
 echo "🌐 Access your application:"
 echo "   - Local: http://localhost:3000"
-echo "   - External: http://187.55.230.139"
+echo "   - External: http://<your-vps-ip>"
 echo ""
 echo "📝 Important Next Steps:"
 echo "   1. Edit environment variables: nano /resume-developer/web/.env.local"

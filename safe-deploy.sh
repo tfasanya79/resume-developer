@@ -17,16 +17,16 @@ sudo nginx -T 2>/dev/null | grep -E "listen.*80|server_name" | head -20
 echo ""
 
 # Check if there's already a config for our IP
-if sudo nginx -T 2>/dev/null | grep -q "server_name.*187.55.230.139"; then
-	echo "⚠️  WARNING: There's already a server block for 187.55.230.139"
+if sudo nginx -T 2>/dev/null | grep -q "server_name.*<your-vps-ip>"; then
+	echo "⚠️  WARNING: There's already a server block for <your-vps-ip>"
 	echo ""
 	echo "Options:"
 	echo "1. Use a subdomain (e.g., cv.yourdomain.com) - RECOMMENDED"
 	echo "2. Use a different port (e.g., 8080)"
-	echo "3. Check what's using 187.55.230.139 and adjust"
+	echo "3. Check what's using <your-vps-ip> and adjust"
 	echo ""
-	echo "Current config for 187.55.230.139:"
-	sudo nginx -T 2>/dev/null | grep -A 20 "server_name.*187.55.230.139"
+	echo "Current config for <your-vps-ip>:"
+	sudo nginx -T 2>/dev/null | grep -A 20 "server_name.*<your-vps-ip>"
 	echo ""
 	read -p "Do you want to continue anyway? (y/n): " -n 1 -r
 	echo
@@ -143,7 +143,7 @@ else
 	echo "   Check with: pm2 logs cv-builder"
 fi
 
-if curl -s -o /dev/null -w "%{http_code}" http://187.55.230.139 | grep -q "200"; then
+if curl -s -o /dev/null -w "%{http_code}" http://<your-vps-ip> | grep -q "200"; then
 	echo "✅ External access working!"
 else
 	echo "⚠️  External access not working yet"
@@ -162,19 +162,19 @@ echo "  - Used nginx reload (no downtime)"
 echo "  - Your existing apps continue running"
 echo ""
 echo "🌐 Access your app:"
-echo "  - Direct: http://187.55.230.139:3000 (always works)"
-echo "  - Via Nginx: http://187.55.230.139 (if no conflicts)"
+echo "  - Direct: http://<your-vps-ip>:3000 (always works)"
+echo "  - Via Nginx: http://<your-vps-ip> (if no conflicts)"
 echo ""
 echo "⚠️  If you have conflicts:"
 echo ""
 echo "Option 1: Use a subdomain (RECOMMENDED)"
-echo "  1. Point cv.yourdomain.com to 187.55.230.139"
+echo "  1. Point cv.yourdomain.com to <your-vps-ip>"
 echo "  2. Edit /etc/nginx/sites-available/cv-builder"
 echo "  3. Change 'server_name _;' to 'server_name cv.yourdomain.com;'"
 echo "  4. sudo systemctl reload nginx"
 echo ""
 echo "Option 2: Use a different port"
-echo "  1. Access via: http://187.55.230.139:3000"
+echo "  1. Access via: http://<your-vps-ip>:3000"
 echo "  2. No Nginx config needed"
 echo ""
 echo "📊 Check status:"

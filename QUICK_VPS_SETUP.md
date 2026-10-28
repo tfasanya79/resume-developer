@@ -1,7 +1,7 @@
 # 🚀 Quick VPS Deployment - Step by Step
 
 ## Your VPS Details
-- **IP**: 187.55.230.139
+- **IP**: <your-vps-ip>
 - **User**: dev-1
 - **Password**: @Cremo9039
 - **Project**: /resume-developer
@@ -14,7 +14,7 @@
 
 **From your local machine:**
 ```bash
-ssh dev-1@187.55.230.139
+ssh dev-1@<your-vps-ip>
 # Enter password: @Cremo9039
 
 # Navigate to project
@@ -41,7 +41,7 @@ The script will automatically:
 **After script completes:**
 1. Edit `.env.local` with real API keys
 2. Restart: `pm2 restart cv-builder`
-3. Visit: http://187.55.230.139
+3. Visit: http://<your-vps-ip>
 
 ---
 
@@ -49,7 +49,7 @@ The script will automatically:
 
 **Step 1: Connect & Update**
 ```bash
-ssh dev-1@187.55.230.139
+ssh dev-1@<your-vps-ip>
 sudo apt update && sudo apt upgrade -y
 ```
 
@@ -81,7 +81,7 @@ nano .env.local
 
 **Add minimum config:**
 ```env
-NEXT_PUBLIC_APP_URL=http://187.55.230.139
+NEXT_PUBLIC_APP_URL=http://<your-vps-ip>
 NODE_ENV=production
 
 # Add these when you have them:
@@ -107,7 +107,7 @@ sudo nano /etc/nginx/sites-available/cv-builder
 ```nginx
 server {
 	listen 80;
-	server_name 187.55.230.139;
+	server_name <your-vps-ip>;
 
 	location / {
 		proxy_pass http://localhost:3000;
@@ -137,7 +137,7 @@ sudo ufw enable
 
 **Step 9: Test**
 ```bash
-# Open browser: http://187.55.230.139
+# Open browser: http://<your-vps-ip>
 ```
 
 ---
@@ -198,7 +198,7 @@ The app will run without these, but features will be limited.
 After getting API keys:
 
 ```bash
-ssh dev-1@187.55.230.139
+ssh dev-1@<your-vps-ip>
 cd /resume-developer/web
 nano .env.local
 ```
@@ -218,7 +218,7 @@ NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_xxxxx
 STRIPE_SECRET_KEY=sk_test_xxxxx
 
 # App
-NEXT_PUBLIC_APP_URL=http://187.55.230.139
+NEXT_PUBLIC_APP_URL=http://<your-vps-ip>
 NODE_ENV=production
 ```
 
@@ -252,7 +252,7 @@ sudo tail -f /var/log/nginx/error.log
 curl http://localhost:3000
 
 # Check from outside
-# Browser: http://187.55.230.139
+# Browser: http://<your-vps-ip>
 ```
 
 ---
@@ -312,7 +312,7 @@ pm2 save
 - [ ] Run deployment script OR complete manual steps
 - [ ] App builds without errors
 - [ ] PM2 shows "cv-builder" as "online"
-- [ ] Can access http://187.55.230.139 in browser
+- [ ] Can access http://<your-vps-ip> in browser
 - [ ] Landing page loads
 - [ ] (Optional) Set up Supabase
 - [ ] (Optional) Add OpenAI key
@@ -323,7 +323,7 @@ pm2 save
 ## 🚀 What's Next?
 
 ### For Testing
-1. ✅ App is now live on http://187.55.230.139
+1. ✅ App is now live on http://<your-vps-ip>
 2. Test the landing page
 3. Add API keys for full functionality
 4. Test CV builder features

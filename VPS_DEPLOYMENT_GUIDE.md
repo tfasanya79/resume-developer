@@ -1,7 +1,7 @@
 # VPS Deployment Guide - Hostinger Cloud
 
 ## Server Details
-- **IP**: 187.55.230.139
+- **IP**: <your-vps-ip>
 - **User**: dev-1
 - **Project Path**: /resume-developer
 - **Purpose**: Testing/Staging environment
@@ -12,7 +12,7 @@
 
 ### 1. Connect to VPS & Verify Setup
 ```bash
-ssh dev-1@187.55.230.139
+ssh dev-1@<your-vps-ip>
 cd /resume-developer
 pwd  # Should show: /home/dev-1/resume-developer or similar
 ls -la  # Verify files are there
@@ -69,7 +69,7 @@ STRIPE_SECRET_KEY=sk_test_your-key
 STRIPE_WEBHOOK_SECRET=whsec_your-webhook-secret
 
 # App Configuration
-NEXT_PUBLIC_APP_URL=http://187.55.230.139
+NEXT_PUBLIC_APP_URL=http://<your-vps-ip>
 NODE_ENV=production
 ```
 
@@ -109,7 +109,7 @@ sudo nano /etc/nginx/sites-available/cv-builder
 ```nginx
 server {
 	listen 80;
-	server_name 187.55.230.139;
+	server_name <your-vps-ip>;
 
 	location / {
 		proxy_pass http://localhost:3000;
@@ -159,7 +159,7 @@ sudo ufw status
 curl http://localhost:3000
 
 # Check from outside
-# Open browser: http://187.55.230.139
+# Open browser: http://<your-vps-ip>
 ```
 
 ---
@@ -171,7 +171,7 @@ If you have a domain (e.g., cvbuilder.yourdomain.com):
 ### 1. Point Domain to VPS
 In your domain registrar's DNS settings:
 ```
-A Record: cvbuilder.yourdomain.com → 187.55.230.139
+A Record: cvbuilder.yourdomain.com → <your-vps-ip>
 ```
 
 ### 2. Update Nginx Configuration
@@ -308,7 +308,7 @@ For immediate testing without Supabase/OpenAI:
 # Create minimal .env.local
 cd /resume-developer/web
 cat > .env.local << EOF
-NEXT_PUBLIC_APP_URL=http://187.55.230.139
+NEXT_PUBLIC_APP_URL=http://<your-vps-ip>
 NODE_ENV=production
 EOF
 
@@ -375,7 +375,7 @@ sudo systemctl enable fail2ban
 ## Access Your Deployment
 
 After setup:
-- **HTTP**: http://187.55.230.139
+- **HTTP**: http://<your-vps-ip>
 - **With Domain**: http://cvbuilder.yourdomain.com
 - **With SSL**: https://cvbuilder.yourdomain.com
 

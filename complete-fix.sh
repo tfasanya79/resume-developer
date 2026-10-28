@@ -8,7 +8,7 @@ echo "=============================="
 
 # Check what's already configured in Nginx
 echo "📋 Checking existing Nginx configuration..."
-sudo nginx -T 2>/dev/null | grep -A 10 "server_name.*187.55.230.139" || echo "No existing config found"
+sudo nginx -T 2>/dev/null | grep -A 10 "server_name.*<your-vps-ip>" || echo "No existing config found"
 
 # Remove ALL existing configs that might conflict
 echo "🧹 Cleaning up conflicting Nginx configs..."
@@ -23,7 +23,7 @@ sudo tee /etc/nginx/sites-available/cv-builder > /dev/null << 'EOFNGINX'
 server {
 	listen 80 default_server;
 	listen [::]:80 default_server;
-	server_name 187.55.230.139 _;
+	server_name <your-vps-ip> _;
 
 	client_max_body_size 10M;
 
@@ -89,7 +89,7 @@ fi
 echo ""
 echo "🌐 Testing external access..."
 sleep 2
-if curl -s -o /dev/null -w "%{http_code}" http://187.55.230.139 | grep -q "200"; then
+if curl -s -o /dev/null -w "%{http_code}" http://<your-vps-ip> | grep -q "200"; then
 	echo "✅ External access working!"
 else
 	echo "⚠️  External access test returned non-200 status"
@@ -102,7 +102,7 @@ echo "✅ DEPLOYMENT COMPLETED!"
 echo "================================================"
 echo ""
 echo "🌐 Your app should be accessible at:"
-echo "   http://187.55.230.139"
+echo "   http://<your-vps-ip>"
 echo ""
 echo "📊 Quick checks:"
 echo "   - PM2 status: pm2 status"
